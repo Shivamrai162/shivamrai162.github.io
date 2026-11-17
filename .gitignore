@@ -1,0 +1,10 @@
+node_modules/
+.azure-deploy-cache/
+.next/
+out/
+.env*
+!.env.example
+*.tsbuildinfo
+next-env.d.ts
+
+deployment-state.json
