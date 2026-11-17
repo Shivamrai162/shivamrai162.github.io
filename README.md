@@ -16,6 +16,7 @@ Use Node.js 22, run `npm ci`, then `npm run dev`. Run `npm run typecheck` and `n
 - Replace `public/Shivam_Rai_Resume.pdf` to update the resume preview/download.
 - Edit the layout in `components/portfolio.tsx` and styles in `app/globals.css`.
 - Every page load starts in dark mode. The header button switches between light and dark for the current visit.
+- Homepage motion lives in `components/portfolio-motion.tsx` and `app/motion.css`: drifting background dots, sequential pipeline stages and project diagram highlights, and brief section entry cues. The diagram control pauses all homepage animations. Reduced-motion visitors start with motion off and can explicitly enable it for that visit. Loops pause off-screen and when the page is hidden. No animation library or additional network assets are required.
 
 ## Work samples
 

@@ -1,0 +1,83 @@
+/* Motion explains the diagrams without shifting their text or layout. */
+.hero-art { isolation: isolate; }
+.dot-field { position: absolute; inset: 0; pointer-events: none; z-index: -1; overflow: hidden; }
+.dot-field::before {
+  content: ""; position: absolute; inset: -24px;
+  background: radial-gradient(circle, var(--blue) 1px, transparent 1.5px);
+  background-size: 18px 18px; opacity: .28;
+  mask-image: radial-gradient(ellipse at center, #000, transparent 75%);
+  animation: dot-drift 12s linear infinite;
+}
+.dot-field::after {
+  content: ""; position: absolute; width: 70%; height: 70%; left: -20%; top: -10%;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--blue) 15%, transparent), transparent 70%);
+  animation: field-glow 12s ease-in-out infinite alternate;
+}
+.dot-field > span { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 9px var(--blue); animation: data-drift 8s linear infinite; }
+.dot-field > span:nth-child(1) { left: 8%; top: 19%; }
+.dot-field > span:nth-child(2) { left: 94%; top: 31%; animation-delay: -2s; background: var(--violet); }
+.dot-field > span:nth-child(3) { left: 6%; top: 58%; animation-delay: -4s; }
+.dot-field > span:nth-child(4) { left: 91%; top: 74%; animation-delay: -6s; background: var(--accent); }
+.dot-field > span:nth-child(5) { left: 49%; top: 9%; animation-delay: -3s; }
+.dot-field > span:nth-child(6) { left: 31%; top: 92%; animation-delay: -5s; background: var(--accent); }
+.node-source { --flow-color: var(--blue); --flow-delay: 0s; }
+.node-transform { --flow-color: var(--violet); --flow-delay: 2.4s; }
+.node-activate { --flow-color: var(--accent); --flow-delay: 4.8s; }
+.hero-art .flow-node { animation: stage-highlight 7.2s ease-in-out infinite; animation-delay: var(--flow-delay); }
+.flow-node::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; border: 1px solid var(--flow-color); opacity: 0; pointer-events: none; animation: stage-border 7.2s ease-in-out infinite; animation-delay: var(--flow-delay); }
+.flow-connector::after { content: ""; position: absolute; left: -3px; top: 0; width: 5px; height: 7px; border-radius: 4px; background: var(--blue); box-shadow: 0 0 9px var(--blue); opacity: 0; animation: vertical-packet 7.2s linear infinite; animation-delay: 1.2s; }
+.connector-second::after { background: var(--accent); box-shadow: 0 0 9px var(--accent); animation-delay: 3.6s; }
+.motion-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 5px; border: 0; border-radius: 4px; padding: 7px 3px; background: transparent; color: var(--soft); font: 12px Inter, "Segoe UI", sans-serif; white-space: nowrap; min-height: 32px; }
+.motion-toggle:hover { color: var(--accent); }
+.motion-toggle:disabled { cursor: default; opacity: .7; }
+.hero-art .art-bottom { gap: 10px; padding-top: 8px; bottom: 13px; }
+.hero-art .art-bottom > span { font-size: 11px; letter-spacing: 0; max-width: 58%; }
+
+/* Source → pipeline → curated, then supervisor → specialist agents. */
+.visual-pipeline .mini-block, .agent-core, .agent-branches > span { --flow-color: var(--card-accent); animation: stage-highlight 7.2s ease-in-out infinite; }
+.visual-pipeline .mini-block:nth-of-type(2) { animation-delay: 2.4s; }
+.visual-pipeline .mini-block:nth-of-type(3) { animation-delay: 4.8s; }
+.mini-wire::before { content: ""; position: absolute; width: 4px; height: 4px; top: -1.5px; left: 0; border-radius: 50%; background: var(--card-accent); opacity: 0; animation: horizontal-packet 7.2s linear infinite; animation-delay: 1.2s; }
+.mini-wire:last-of-type::before { animation-delay: 3.6s; }
+.agent-branches > span { animation-delay: 2.4s; }
+.agent-branches > span:nth-child(2) { animation-delay: 3.2s; }
+.agent-branches > span:nth-child(3) { animation-delay: 4s; }
+.quality-code > div:not(:first-child) svg { animation: quality-check 7.2s ease-in-out infinite; }
+.quality-code > div:nth-child(3) svg { animation-delay: .8s; }
+.quality-code > div:nth-child(4) svg { animation-delay: 1.6s; }
+
+/* Brief entry cues help scanning; all content remains visible without JS. */
+.portfolio-motion .motion-entered.section-heading,
+.portfolio-motion .motion-entered.timeline-item,
+.portfolio-motion .motion-entered.skill-group,
+.portfolio-motion .motion-entered.contact-grid { animation: content-arrive .6s ease-out both; }
+.portfolio-motion .motion-entered.impact-grid > div { animation: content-arrive .6s ease-out both; }
+.portfolio-motion .motion-entered.impact-grid > div:nth-child(2) { animation-delay: .08s; }
+.portfolio-motion .motion-entered.impact-grid > div:nth-child(3) { animation-delay: .16s; }
+.portfolio-motion .motion-entered.impact-grid > div:nth-child(4) { animation-delay: .24s; }
+.skill-tags > span { transition: border-color .2s, background .2s; }
+.skill-tags > span:hover { border-color: var(--blue); background: var(--panel-2); }
+.text-link > svg, .hero-contact > svg, .project-links a > svg { transition: transform .2s; }
+.text-link:hover > svg, .hero-contact:hover > svg, .project-links a:hover > svg { transform: translateX(3px); }
+
+@keyframes dot-drift { to { transform: translate3d(18px, 18px, 0); } }
+@keyframes field-glow { to { transform: translate3d(75%, 55%, 0); } }
+@keyframes data-drift { 0% { transform: translateY(14px); opacity: 0; } 20%, 75% { opacity: .75; } 100% { transform: translateY(-45px); opacity: 0; } }
+@keyframes stage-highlight { 0%, 28%, 100% { box-shadow: 0 8px 24px #0000000d; } 6%, 19% { box-shadow: 0 0 22px color-mix(in srgb, var(--flow-color) 23%, transparent); } }
+@keyframes stage-border { 0%, 28%, 100% { opacity: 0; } 6%, 19% { opacity: .9; } }
+@keyframes vertical-packet { 0% { transform: translateY(0); opacity: 0; } 2% { opacity: 1; } 15% { transform: translateY(28px); opacity: 1; } 17%, 100% { transform: translateY(28px); opacity: 0; } }
+@keyframes horizontal-packet { 0% { left: 0; opacity: 0; } 2% { opacity: 1; } 15% { left: 100%; opacity: 1; } 17%, 100% { left: 100%; opacity: 0; } }
+@keyframes quality-check { 0%, 8%, 70%, 100% { opacity: .4; } 18%, 55% { opacity: 1; filter: drop-shadow(0 0 5px var(--amber)); } }
+@keyframes content-arrive { from { opacity: .65; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Pause loops off-screen and when the visitor pauses or hides the page. */
+.hero-art:not(.motion-visible) *, .hero-art:not(.motion-visible) *::before, .hero-art:not(.motion-visible) *::after,
+.project-visual:not(.motion-visible) *, .project-visual:not(.motion-visible) *::before { animation-play-state: paused; }
+.portfolio-motion[data-motion="paused"] *, .portfolio-motion[data-motion="paused"] *::before, .portfolio-motion[data-motion="paused"] *::after { animation-play-state: paused !important; }
+.portfolio-motion[data-motion="paused"] .motion-entered { animation: none; }
+@media (max-width: 360px) { .hero-art .art-bottom { left: 12px; right: 12px; gap: 8px; }.hero-art .art-bottom > span { max-width: 55%; } }
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-motion:not([data-motion-preference="enabled"]) *, .portfolio-motion:not([data-motion-preference="enabled"]) *::before, .portfolio-motion:not([data-motion-preference="enabled"]) *::after { animation: none !important; transition: none !important; }
+  .portfolio-motion:not([data-motion-preference="enabled"]) .dot-field > span, .portfolio-motion:not([data-motion-preference="enabled"]) .flow-connector::after, .portfolio-motion:not([data-motion-preference="enabled"]) .mini-wire::before { display: none; }
+  .dot-field::before { opacity: .18; }
+}

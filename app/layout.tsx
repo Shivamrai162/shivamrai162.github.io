@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./motion.css";
 import { Analytics } from "@/components/analytics";
 export const metadata: Metadata = {
   metadataBase: new URL("https://shivamrai162.github.io"),

@@ -4,6 +4,7 @@ import { ArrowUpRight, ArrowDown, ArrowRight, Download, MapPin, X, Check, Databa
 import { Github, Linkedin } from "@/components/social-icons";
 import { AnalyticsNotice } from "@/components/analytics";
 import { trackEvent } from "@/lib/analytics";
+import { PortfolioMotion, MotionToggle } from "@/components/portfolio-motion";
 import { SiteHeader } from "@/components/site-header";
 import { profile, projects, experience, skills, certifications } from "@/lib/content";
 function SectionHeading({ number, eyebrow, title, description }: { number: string; eyebrow: string; title: string; description?: string }) {
@@ -19,13 +20,13 @@ function Hero() {
     <a href="#contact" className="hero-contact">Get in touch <ArrowRight size={15}/></a>
     <div className="hero-location"><MapPin size={14}/>{profile.location}<span className="location-line"/>Open to data & AI roles</div>
   </div><div className="hero-art" aria-label="Data engineering workflow: ingest, transform, activate">
-    <div className="art-top"><span><span className="tiny-dot"/>SYSTEM OVERVIEW</span><span>01 — 03</span></div><div className="orbit orbit-one"/><div className="orbit orbit-two"/>
+    <div className="dot-field" aria-hidden="true"><span/><span/><span/><span/><span/><span/></div><div className="art-top"><span><span className="tiny-dot"/>SYSTEM OVERVIEW</span><span>01 — 03</span></div><div className="orbit orbit-one"/><div className="orbit orbit-two"/>
     <div className="flow-node node-source"><Database size={25}/><div><strong>Ingest</strong><span>Many sources. One foundation.</span></div><span className="node-number">01</span></div>
     <div className="flow-connector connector-first"><span>RAW → CURATED</span></div>
     <div className="flow-node node-transform"><Layers3 size={25}/><div><strong>Transform</strong><span>Reliable, ready-to-use data.</span></div><span className="node-number">02</span></div>
     <div className="flow-connector connector-second"><span>DATA → INTELLIGENCE</span></div>
     <div className="flow-node node-activate"><Sparkles size={25}/><div><strong>Activate</strong><span>Analytics. Agents. Answers.</span></div><span className="node-number">03</span></div>
-    <div className="art-bottom"><span>BUILT FOR REAL-WORLD IMPACT</span><ArrowUpRight size={16}/></div>
+    <div className="art-bottom"><span>BUILT FOR REAL-WORLD IMPACT</span><MotionToggle/></div>
   </div><div className="hero-bottom"><span>PYTHON <span>/</span> SQL <span>/</span> PYSPARK <span>/</span> DATABRICKS <span>/</span> AZURE</span><a href="#about">Explore my work <ArrowDown size={14}/></a></div></section>;
 }
 function About() {
@@ -70,5 +71,5 @@ function ResumeModal({ close }: { close: () => void }) {
 }
 export function Portfolio() {
   const [resume, setResume] = useState(false);
-  return <><a className="skip-link" href="#main">Skip to content</a><SiteHeader/><main id="main"><Hero/><About/><Experience onResume={() => { trackEvent("resume_preview"); setResume(true); }}/><Projects/><Skills/><Contact/></main><footer className="footer shell"><a className="brand" href="#">sr<span>.</span></a><p>© {new Date().getFullYear()} Shivam Rai <span>·</span> Built with intention.</p><a href="#">Back to top <ArrowUpRight size={14}/></a></footer><div className="shell"><AnalyticsNotice /></div>{resume && <ResumeModal close={() => setResume(false)}/>}</>;
+  return <PortfolioMotion><a className="skip-link" href="#main">Skip to content</a><SiteHeader/><main id="main"><Hero/><About/><Experience onResume={() => { trackEvent("resume_preview"); setResume(true); }}/><Projects/><Skills/><Contact/></main><footer className="footer shell"><a className="brand" href="#">sr<span>.</span></a><p>© {new Date().getFullYear()} Shivam Rai <span>·</span> Built with intention.</p><a href="#">Back to top <ArrowUpRight size={14}/></a></footer><div className="shell"><AnalyticsNotice /></div>{resume && <ResumeModal close={() => setResume(false)}/>}</PortfolioMotion>;
 }
