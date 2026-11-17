@@ -38,7 +38,7 @@ export function Analytics() {
   }, [configured, ready]);
 
   if (!configured) return null;
-  return <Script id="goatcounter" src="https://gc.zgo.at/count.js"
+  return <Script id="portfolio-goatcounter" src="https://gc.zgo.at/count.js"
     data-goatcounter={`https://${code}.goatcounter.com/count`}
     strategy="afterInteractive" onReady={() => setReady(true)} />;
 }
