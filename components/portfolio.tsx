@@ -1,31 +1,11 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { ArrowUpRight, ArrowDown, ArrowRight, Download, MapPin, Sun, Moon, Menu, X, Check, Database, Layers3, Workflow, Braces, Sparkles, ShieldCheck, ExternalLink, FileText } from "lucide-react";
+import { ArrowUpRight, ArrowDown, ArrowRight, Download, MapPin, X, Check, Database, Layers3, Workflow, Braces, Sparkles, ShieldCheck, ExternalLink, FileText, FolderOpen } from "lucide-react";
 import { Github, Linkedin } from "@/components/social-icons";
 import { AnalyticsNotice } from "@/components/analytics";
 import { trackEvent } from "@/lib/analytics";
+import { SiteHeader } from "@/components/site-header";
 import { profile, projects, experience, skills, certifications } from "@/lib/content";
-const nav = [ ["About", "about"], ["Experience", "experience"], ["Projects", "projects"], ["Skills", "skills"] ];
-function ThemeToggle() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
-  const action = theme === "dark" ? "light" : "dark";
-  return <button className="theme-toggle" type="button" aria-label={`Switch to ${action} mode`} aria-pressed={theme === "light"} onClick={() => setTheme(action)} title={`Switch to ${action} mode`}>
-    {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}<span>{theme === "dark" ? "Light mode" : "Dark mode"}</span>
-  </button>;
-}
-function Header() {
-  const [open, setOpen] = useState(false);
-  return <header className="header"><div className="shell header-inner">
-    <a className="brand" href="#" aria-label="Shivam Rai, home">sr<span>.</span></a>
-    <nav aria-label="Main navigation" className={open ? "navigation is-open" : "navigation"}>
-      {nav.map(([label,id]) => <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>{label}</a>)}
-      <a href="#contact" className="nav-contact" onClick={() => setOpen(false)}>Let’s talk <ArrowUpRight size={14} /></a>
-    </nav><div className="header-actions"><ThemeToggle /><button className="icon-button mobile-menu" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X size={20}/> : <Menu size={20}/>}</button></div>
-  </div></header>;
-}
 function SectionHeading({ number, eyebrow, title, description }: { number: string; eyebrow: string; title: string; description?: string }) {
   return <div className="section-heading"><div><p className="eyebrow"><span>{number}</span> {eyebrow}</p><h2>{title}</h2></div>{description && <p className="section-description">{description}</p>}</div>;
 }
@@ -62,11 +42,11 @@ function ProjectVisual({ type }: { type: string }) {
   return <div className={`project-visual visual-${type}`} aria-hidden="true">{type === "pipeline" ? <><div className="mini-block"><Database size={22}/><span>SOURCE</span></div><span className="mini-wire"/><div className="mini-block highlighted"><Workflow size={24}/><span>PIPELINE</span></div><span className="mini-wire"/><div className="mini-block"><Layers3 size={22}/><span>CURATED</span></div></> : type === "agents" ? <div className="agent-diagram"><div className="agent-core"><Sparkles size={19}/>Supervisor</div><div className="agent-branches"><span>Knowledge</span><span>Genie</span><span>Retrieval</span></div></div> : <div className="quality-code"><div><span className="code-purple">schema</span><span className="code-muted"> → </span><span className="code-mint">intelligence</span></div><div><Check size={14}/> completeness</div><div><Check size={14}/> consistency</div><div><Check size={14}/> explainability</div></div>}</div>;
 }
 function ProjectCard({ project }: { project: typeof projects[number] }) {
-  const [expanded, setExpanded] = useState(false);
   const live = project.live.startsWith("https://"); const source = project.source.startsWith("https://");
-  return <article className="project-card"><ProjectVisual type={project.visual}/><div className="project-content"><p className="project-category">{project.category}<span>{project.id}</span></p><h3>{project.title}</h3><p className="project-description">{project.description}</p><div className="tags">{project.tags.map(t => <span key={t}>{t}</span>)}</div><div className="project-links">{live ? <a href={project.live} data-analytics-event="project_demo" target="_blank" rel="noopener noreferrer">Live demo <ArrowUpRight size={15}/></a> : <button onClick={() => setExpanded(!expanded)} aria-expanded={expanded}>Live demo <ArrowUpRight size={15}/></button>}{source ? <a href={project.source} data-analytics-event="project_source" target="_blank" rel="noopener noreferrer"><Github size={14}/>Source</a> : <button onClick={() => setExpanded(!expanded)} aria-expanded={expanded}><Github size={14}/>Source</button>}</div>{expanded && <div className="placeholder-links"><p><ExternalLink size={13}/> {project.live}</p><p><Github size={13}/> {project.source}</p></div>}</div></article>;
+  const caseId = { "01": "cloud-data-migration", "02": "multi-agent-support", "03": "ai-data-quality" }[project.id];
+  return <article className="project-card"><ProjectVisual type={project.visual}/><div className="project-content"><p className="project-category">{project.category}<span>{project.id}</span></p><h3>{project.title}</h3><p className="project-description">{project.description}</p><div className="tags">{project.tags.map(t => <span key={t}>{t}</span>)}</div><div className="project-links"><a href={`/work/#${caseId}`}>Read case study <ArrowUpRight size={15}/></a>{live && <a href={project.live} data-analytics-event="project_demo" target="_blank" rel="noopener noreferrer">Live demo <ArrowUpRight size={15}/></a>}{source && <a href={project.source} data-analytics-event="project_source" target="_blank" rel="noopener noreferrer"><Github size={14}/>Source</a>}</div></div></article>;
 }
-function Projects() { return <section id="projects" className="section shell"><SectionHeading number="03" eyebrow="SELECTED WORK" title="From pipelines to possibilities." description="A selection of data and AI projects from my engineering work."/><div className="project-grid">{projects.map(p => <ProjectCard project={p} key={p.id}/>)}</div><p className="project-note">Also built: production ADF ETL pipelines and three curated Genie agents for 30+ datasets, used by 200+ analysts.</p></section>; }
+function Projects() { return <section id="projects" className="section shell"><SectionHeading number="03" eyebrow="SELECTED WORK" title="From pipelines to possibilities." description="A selection of data and AI projects from my engineering work."/><div className="project-grid">{projects.map(p => <ProjectCard project={p} key={p.id}/>)}</div><div className="work-home-link"><div><FolderOpen size={22}/><p>Explore the thinking, workflows and supporting material behind my work.</p></div><a className="text-link" href="/work/">Browse work samples <ArrowRight size={17}/></a></div><p className="project-note">Also built: production ADF ETL pipelines and three curated Genie agents for 30+ datasets, used by 200+ analysts.</p></section>; }
 function Skills() {
   const [all, setAll] = useState(false);
   return <section id="skills" className="section shell"><SectionHeading number="04" eyebrow="MY TOOLKIT" title="The tools behind the work." description="A practical stack for moving, shaping and making sense of data."/><div className="skills-grid">{skills.map((group, i) => <div className="skill-group" key={group.title}><div className="skill-title">{i === 0 ? <Braces size={18}/> : i === 1 ? <Database size={18}/> : i === 2 ? <Sparkles size={18}/> : <Workflow size={18}/>}<h3>{group.title}</h3></div><div className="tags skill-tags">{group.skills.map(s => <span key={s}>{s}</span>)}</div></div>)}</div>
@@ -90,5 +70,5 @@ function ResumeModal({ close }: { close: () => void }) {
 }
 export function Portfolio() {
   const [resume, setResume] = useState(false);
-  return <><a className="skip-link" href="#main">Skip to content</a><Header/><main id="main"><Hero/><About/><Experience onResume={() => { trackEvent("resume_preview"); setResume(true); }}/><Projects/><Skills/><Contact/></main><footer className="footer shell"><a className="brand" href="#">sr<span>.</span></a><p>© {new Date().getFullYear()} Shivam Rai <span>·</span> Built with intention.</p><a href="#">Back to top <ArrowUpRight size={14}/></a></footer><div className="shell"><AnalyticsNotice /></div>{resume && <ResumeModal close={() => setResume(false)}/>}</>;
+  return <><a className="skip-link" href="#main">Skip to content</a><SiteHeader/><main id="main"><Hero/><About/><Experience onResume={() => { trackEvent("resume_preview"); setResume(true); }}/><Projects/><Skills/><Contact/></main><footer className="footer shell"><a className="brand" href="#">sr<span>.</span></a><p>© {new Date().getFullYear()} Shivam Rai <span>·</span> Built with intention.</p><a href="#">Back to top <ArrowUpRight size={14}/></a></footer><div className="shell"><AnalyticsNotice /></div>{resume && <ResumeModal close={() => setResume(false)}/>}</>;
 }
