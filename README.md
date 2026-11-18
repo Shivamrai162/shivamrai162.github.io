@@ -28,14 +28,12 @@ To publish a supporting file, add an `href` to its artifact entry using an appro
 
 ## Contact messages
 
-GitHub Pages serves static files. The form submits to the existing portfolio API at `https://shivam-rai-data-portfolio.shivamrai162.chatgpt.site/api/contact`, which saves messages in the owner's private Sites database. It does not send an email notification. The API permits the exact GitHub Pages origin, validates input, and limits each sender to five saved messages per hour. Keep that backend published for form delivery; the direct email link works independently.
-
-The public build variable `NEXT_PUBLIC_CONTACT_ENDPOINT` can override the API URL. Any replacement endpoint must accept the form JSON fields `name`, `email`, `message`, and `website`, support the GitHub origin, and return a successful JSON response only after saving the message. No deployment token or database credential belongs in this repository.
+The contact form opens a prefilled draft in the visitor's email app. The visitor reviews and sends the draft from that app. The direct email address and LinkedIn link provide other ways to get in touch.
 
 ## Optional site statistics
 
 Google Analytics is not included. The repository variable `NEXT_PUBLIC_GOATCOUNTER_CODE` is configured as `shivamrai162`, using the account at https://shivamrai162.goatcounter.com. The tracking script is included during deployment when that variable is set. Run the deployment workflow again after changing a build variable. GitHub reports still require a statistics-reading API secret and a reporting workflow; neither is included yet.
 
-The integration counts page views and these fixed-name events: resume downloads/open/preview; profile and project links; opened case studies and supporting files; saved contact messages; and section views. It never includes contact form values in analytics events. Use the provider dashboard for visits, referring sites, approximate locations, browsers and screen sizes. Traffic before activation cannot be recovered. Resume events measure clicks rather than proof that a download completed. Blockers may prevent counting.
+The integration counts page views and these fixed-name events: resume downloads/open/preview; profile and project links; opened case studies and supporting files; email draft clicks; and section views. Analytics exclude contact form values. Use the provider dashboard for visits, referring sites, approximate locations, browsers and screen sizes. Traffic before activation cannot be recovered. Resume and email draft events measure clicks. Blockers may prevent counting.
 
 Keep `.env.local`, `node_modules`, generated builds and credentials out of Git. `.env.example` lists only public configuration.

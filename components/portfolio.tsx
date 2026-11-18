@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ArrowDown, ArrowRight, Download, MapPin, X, Check, Database, Layers3, Workflow, Braces, Sparkles, ShieldCheck, ExternalLink, FileText, FolderOpen } from "lucide-react";
 import { Github, Linkedin } from "@/components/social-icons";
 import { AnalyticsNotice } from "@/components/analytics";
@@ -55,13 +55,32 @@ function Skills() {
   <div className="education"><span>EDUCATION</span><p>Bachelor of Commerce · Financial Accounting & Auditing</p><span>Mumbai University · 2017–2020</span></div></section>;
 }
 function ContactForm() {
-  const [state, setState] = useState<"idle"|"sending"|"success"|"error">("idle"); const [message, setMessage] = useState("");
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); const form = event.currentTarget; const data = new FormData(form); setState("sending"); setMessage("");
-    try { const response = await fetch(process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "https://shivam-rai-data-portfolio.shivamrai162.chatgpt.site/api/contact", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(Object.fromEntries(data)) }); const result = await response.json() as { error?: string; message?: string }; if (!response.ok) throw new Error(result.error || "Message could not be sent. Please try again."); trackEvent("contact_success");setState("success");setMessage(result.message || "Your message has been received.");form.reset(); }
-    catch (error) { setState("error");setMessage(error instanceof Error ? error.message : "Please try again or email me directly."); }
-  }
-  return <form className="contact-form" onSubmit={submit}><div className="form-row"><label>Your name<input name="name" autoComplete="name" placeholder="Alex Morgan" required minLength={2} maxLength={100}/></label><label>Email address<input name="email" type="email" autoComplete="email" placeholder="alex@company.com" required maxLength={254}/></label></div><label>What do you have in mind?<textarea name="message" placeholder="A role, a project, or an interesting data challenge…" rows={4} required minLength={10} maxLength={4000}/></label><div className="honeypot" aria-hidden="true"><label>Leave empty<input name="website" tabIndex={-1} autoComplete="off"/></label></div><div className="form-bottom"><span>Your message is saved securely for my review.</span><button className="button primary" type="submit" disabled={state === "sending"}>{state === "sending" ? "Sending…" : "Send message"}<ArrowUpRight size={16}/></button></div><p role={state === "error" ? "alert" : "status"} className={`form-status ${state}`}>{message}</p></form>;
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
+  const body = [message.trim(), name.trim()].filter(Boolean).join("\n\n").replace(/\n/g, "\r\n");
+  const query = new URLSearchParams({ subject: "Portfolio inquiry", body }).toString().replace(/\+/g, "%20");
+
+  return (
+    <div className="contact-form">
+      <label>
+        Your name
+        <input autoComplete="name" placeholder="Alex Morgan" maxLength={100}
+          value={name} onChange={event => setName(event.target.value)} />
+      </label>
+      <label>
+        What do you have in mind?
+        <textarea placeholder="A role, a project, or an interesting data challenge…" rows={4} maxLength={1500}
+          value={message} onChange={event => setMessage(event.target.value)} />
+      </label>
+      <div className="form-bottom">
+        <span id="email-draft-help">Your email app opens a draft for you to review and send.</span>
+        <a className="button primary" href={`mailto:${profile.email}?${query}`}
+          aria-describedby="email-draft-help" data-analytics-event="contact_email_draft">
+          Open email draft <ArrowUpRight size={16} />
+        </a>
+      </div>
+    </div>
+  );
 }
 function Contact() { const hasGithub=profile.github.startsWith("https://"); return <section id="contact" className="section shell contact-section"><div className="contact-grid"><div><p className="eyebrow"><span>05</span> LET’S CONNECT</p><h2>Good work starts<br/>with a conversation<span>.</span></h2><p className="contact-description">Hiring for data engineering or applied AI?<br/>I’d love to hear what you’re building.</p><a className="email-link" href={`mailto:${profile.email}`}>{profile.email}<ArrowUpRight size={19}/></a><div className="social-links"><a href={profile.linkedin} target="_blank" rel="noopener noreferrer"><Linkedin size={16}/>LinkedIn<ArrowUpRight size={13}/></a>{hasGithub ? <a href={profile.github} target="_blank" rel="noopener noreferrer"><Github size={16}/>GitHub<ArrowUpRight size={13}/></a> : <span title={profile.github}><Github size={16}/>GitHub <span className="github-placeholder">[PLACEHOLDER]</span></span>}</div></div><ContactForm/></div></section>; }
 function ResumeModal({ close }: { close: () => void }) {

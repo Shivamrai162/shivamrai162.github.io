@@ -10,7 +10,7 @@ export const analyticsEvents = {
   work_sample_open: "Supporting work sample opened",
   case_study_open: "Case study opened",
   work_filter: "Work category filter used",
-  contact_success: "Contact message saved",
+  contact_email_draft: "Email draft clicked",
   section_about: "About section viewed",
   section_experience: "Experience section viewed",
   section_projects: "Projects section viewed",
